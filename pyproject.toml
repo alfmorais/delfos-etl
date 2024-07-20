@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "delfos-etl"
+version = "0.1.0"
+description = ""
+authors = ["alfmorais <alfredneto@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.2"
+httpx = "^0.27.0"
+sqlalchemy = "^2.0.31"
+alembic = "^1.13.2"
+psycopg = "^3.2.1"
+psycopg-binary = "^3.2.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.3"
+ipdb = "^0.13.13"
+taskipy = "^1.13.0"
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ["migrations"]
+
+[tool.ruff.lint]
+preview = true
+select = ["I", "F", "E", "W", "PL", "PT"]
+ignore = ["PLR2004", "PLW0108"]
+
+[tool.ruff.format]
+preview = true
+quote-style = "double"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "-p no:warnings"
+asyncio_mode = "auto"
+
+[tool.taskipy.tasks]
+lint = "ruff check . && ruff check . --diff"
+format = "ruff check . --fix && ruff format ."
+test = "pytest -s -x --cov=src -vv"
+build = "docker compose build --no-cache"
+run = "docker compose up"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
